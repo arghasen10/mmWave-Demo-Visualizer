@@ -93,7 +93,7 @@ var MyUtil;
         var t = [];
         var start=0;
         for (var r = 0; r < rows; r++, start+=cols) {
-               var row = vec.slice(start, start+cols);
+            var row = vec.slice(start, start+cols);
             t.push(row);
         }
         return t;
