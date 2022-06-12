@@ -95,6 +95,27 @@ AppServer.prototype.start = function() {
                 _endRequest(200, 'Server shutting down...');
                 self.stop()
                 break;
+			case 'postdata':
+				console.log('Data Post Received');
+				if (req.method == 'POST') {
+					var body = '';
+			
+					req.on('data', function (data) {
+						body += data;
+					});
+			
+					req.on('end', function () {
+						body += '\n';
+						// console.log(body);
+						fs.appendFile('data.txt', body, function (err) {
+							if (err) throw err;
+							console.log('Saved! ' + body.length);
+						  });
+					});
+				}
+				_endRequest(200, '{}');
+				break;
+				
             }
 		
 		/* runtime version.xml file */

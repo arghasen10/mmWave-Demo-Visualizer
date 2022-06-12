@@ -1486,6 +1486,20 @@ var process1 = function (bytevec) {
     };
     console.log(ObjRes);
 
+      (async () => {
+        const rawResponse = await fetch('/api/postdata', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(ObjRes)
+        });
+        const content = await rawResponse.json();
+      
+        console.log("posted data");
+      })();
+
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
       Make sure that scatter plot is updated when legacy frame is used and there is
