@@ -1476,7 +1476,12 @@ var process1 = function (bytevec) {
         }
         byteVecIdx += tlvlength;
     }
+    var today = new Date();
+    datenow = today.getUTCDate()+'/'+today.getMonth()+'/'+today.getFullYear();
+    timenow = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
+    timeRes = {datenow: datenow, timenow:timenow};
     ObjRes = {
+        ...timeRes,
         ...detObjRes,
         ...rangeObjRes,
         ...noiseObjRes,
@@ -1918,10 +1923,10 @@ var processRangeNoiseProfile = function (bytevec, byteVecIdx, Params, isRangePro
     elapsed_time.logMagRange = new Date().getTime() - start_time;
     //}
     if (isRangeProfile == true){
-        return { rp_x: rp_x, rp_y: rp.valueOf() }
+        return { rp_y: rp.valueOf() }
     }
     else{
-        return { noiserp_x: rp_x, noiserp_y: rp.valueOf() }
+        return { noiserp_y: rp.valueOf() }
     }    
 };
 
@@ -2011,7 +2016,7 @@ var processAzimuthHeatMap = function (bytevec, byteVecIdx, Params) {
         }
         elapsed_time.rangeAzimuthHeatMap = [start_time2 - start_time, start_time3 - start_time2, new Date().getTime() - start_time3];
     }
-    return { azimuthx: Params.rangeAzimuthHeatMapGrid_xlin, azimuthy: Params.rangeAzimuthHeatMapGrid_ylin, azimuthz: zi }
+    return { azimuthz: zi }
 };
 
 var processRangeDopplerHeatMap = function (bytevec, byteVecIdx, Params) {
@@ -2056,7 +2061,7 @@ var processRangeDopplerHeatMap = function (bytevec, byteVecIdx, Params) {
         elapsed_time.rangeDopplerHeatMap = new Date().getTime() - start_time;
     }
     // return elapsed_time;
-    return { doppx: range.valueOf(), doppy: dopplermps.valueOf(), doppz: rangeDoppler }
+    return { doppz: rangeDoppler }
 };
 
 var processStatistics = function (bytevec, byteVecIdx, Params) {
