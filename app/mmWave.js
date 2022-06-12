@@ -1439,7 +1439,12 @@ var process1 = function (bytevec) {
     Params.numDetectedObj[Params.currentSubFrameNumber] = numDetectedObj;
 
     var detObjRes = {};
-
+    var rangeObjRes = {};
+    var noiseObjRes = {};
+    var azimObjRes = {};
+    var doppObjRes = {};
+    var statsObjRes = {};
+    var ObjRes = {};
     // Start of TLVs
     //console.log("got number subf=%d and numTLVs=%d tlvtype=%d",Params.currentSubFrameNumber,numTLVs);
     for (var tlvidx = 0; tlvidx < numTLVs; tlvidx++) {
@@ -1454,23 +1459,32 @@ var process1 = function (bytevec) {
             detObjRes = processDetectedPoints(bytevec, byteVecIdx, Params);
             gatherParamStats(Params.plot.scatterStats, getTimeDiff(start_tlv_ticks));
         } else if (tlvtype == TLV_type.MMWDEMO_OUTPUT_MSG_RANGE_PROFILE) {
-            processRangeNoiseProfile(bytevec, byteVecIdx, Params, true, detObjRes);
+            rangeObjRes = processRangeNoiseProfile(bytevec, byteVecIdx, Params, true, detObjRes);
             gatherParamStats(Params.plot.rangeStats, getTimeDiff(start_tlv_ticks));
         } else if (tlvtype == TLV_type.MMWDEMO_OUTPUT_MSG_NOISE_PROFILE) {
-            processRangeNoiseProfile(bytevec, byteVecIdx, Params, false);
+            noiseObjRes = processRangeNoiseProfile(bytevec, byteVecIdx, Params, false);
             gatherParamStats(Params.plot.noiseStats, getTimeDiff(start_tlv_ticks));
         } else if (tlvtype == TLV_type.MMWDEMO_OUTPUT_MSG_AZIMUT_STATIC_HEAT_MAP) {
-            processAzimuthHeatMap(bytevec, byteVecIdx, Params);
+            azimObjRes = processAzimuthHeatMap(bytevec, byteVecIdx, Params);
             gatherParamStats(Params.plot.azimuthStats, getTimeDiff(start_tlv_ticks));
         } else if (tlvtype == TLV_type.MMWDEMO_OUTPUT_MSG_RANGE_DOPPLER_HEAT_MAP) {
-            processRangeDopplerHeatMap(bytevec, byteVecIdx, Params);
+            doppObjRes = processRangeDopplerHeatMap(bytevec, byteVecIdx, Params);
             gatherParamStats(Params.plot.dopplerStats, getTimeDiff(start_tlv_ticks));
         } else if (tlvtype == TLV_type.MMWDEMO_OUTPUT_MSG_STATS) {
-            processStatistics(bytevec, byteVecIdx, Params);
+            statsObjRes = processStatistics(bytevec, byteVecIdx, Params);
             gatherParamStats(Params.plot.cpuloadStats, getTimeDiff(start_tlv_ticks));
         }
         byteVecIdx += tlvlength;
     }
+    ObjRes = {
+        ...detObjRes,
+        ...rangeObjRes,
+        ...noiseObjRes,
+        ...azimObjRes,
+        ...doppObjRes,
+        ...statsObjRes
+    };
+    console.log(ObjRes);
 
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
@@ -1889,6 +1903,12 @@ var processRangeNoiseProfile = function (bytevec, byteVecIdx, Params, isRangePro
     }
     elapsed_time.logMagRange = new Date().getTime() - start_time;
     //}
+    if (isRangeProfile == true){
+        return { rp_x: rp_x, rp_y: rp.valueOf() }
+    }
+    else{
+        return { noiserp_x: rp_x, noiserp_y: rp.valueOf() }
+    }    
 };
 
 var processAzimuthHeatMap = function (bytevec, byteVecIdx, Params) {
@@ -1977,6 +1997,7 @@ var processAzimuthHeatMap = function (bytevec, byteVecIdx, Params) {
         }
         elapsed_time.rangeAzimuthHeatMap = [start_time2 - start_time, start_time3 - start_time2, new Date().getTime() - start_time3];
     }
+    return { azimuthx: Params.rangeAzimuthHeatMapGrid_xlin, azimuthy: Params.rangeAzimuthHeatMapGrid_ylin, azimuthz: zi }
 };
 
 var processRangeDopplerHeatMap = function (bytevec, byteVecIdx, Params) {
@@ -2020,7 +2041,8 @@ var processRangeDopplerHeatMap = function (bytevec, byteVecIdx, Params) {
         }
         elapsed_time.rangeDopplerHeatMap = new Date().getTime() - start_time;
     }
-    return elapsed_time;
+    // return elapsed_time;
+    return { doppx: range.valueOf(), doppy: dopplermps.valueOf(), doppz: rangeDoppler }
 };
 
 var processStatistics = function (bytevec, byteVecIdx, Params) {
@@ -2055,6 +2077,9 @@ var processStatistics = function (bytevec, byteVecIdx, Params) {
             templateObj.$.ti_widget_plot5.redrawdata();
         }
     }
+    return { interFrameProcessingTime: Params.interFrameProcessingTime[subFrameNum], interFrameProcessingMargin: Params.interFrameProcessingMargin[subFrameNum], 
+        interChirpProcessingMargin: Params.interChirpProcessingMargin[subFrameNum], transmitOutputTime: Params.transmitOutputTime[subFrameNum],
+        activeFrameCPULoad: Params.activeFrameCPULoad[subFrameNum], interFrameCPULoad: Params.interFrameCPULoad[subFrameNum] }
 };
 
 var positionPlot = function (plot, display, posIdx) {
