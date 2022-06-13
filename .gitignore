@@ -7,3 +7,5 @@ splash/
 launcher.lnx
 data.txt
 *.txt
+*.csv
+.idea/
