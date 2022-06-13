@@ -4,13 +4,10 @@ import os
 import pandas as pd
 import csv
 
-
 col_names = ['datenow', 'timenow', 'rangeIdx', 'dopplerIdx', 'numDetectedObj', 'range', 'peakVal', 'x_coord', 'y_coord',
-            'rp_y', 'noiserp_y', 'azimuthz', 'doppz', 'interFrameProcessingTime',
-            'interFrameProcessingMargin', 'interChirpProcessingMargin', 
-            'transmitOutputTime', 'activeFrameCPULoad', 'interFrameCPULoad', 'activity']
-
-
+             'rp_y', 'noiserp_y', 'azimuthz', 'doppz', 'interFrameProcessingTime',
+             'interFrameProcessingMargin', 'interChirpProcessingMargin',
+             'transmitOutputTime', 'activeFrameCPULoad', 'interFrameCPULoad', 'activity']
 
 # with open('coarse_activity.csv', 'w') as f:
 #     csv.DictWriter(f, fieldnames=col_names).writeheader()
@@ -43,4 +40,4 @@ for file in all_files:
 
 
 df1 = pd.read_csv(files[0])
-rp_x =  df1['rangeIdx']
+rp_x = df1['rangeIdx']
