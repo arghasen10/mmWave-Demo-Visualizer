@@ -1755,7 +1755,7 @@ var processDetectedPoints = function (bytevec, byteVecIdx, Params) {
         }
     } // end if (Params.guiMonitor.detectedObjects == 1)
     elapsed_time.total_det_obj_process = new Date().getTime() - proc_start_time;
-    return { rangeIdx: rangeIdx, dopplerIdx: dopplerIdx, numDetectedObj: numDetectedObj }
+    return { rangeIdx: rangeIdx, dopplerIdx: dopplerIdx, numDetectedObj: numDetectedObj, range: range, peakVal: peakVal, x_coord: x_coord, y_coord:y_coord }
 };
 
 /* 

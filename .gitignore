@@ -9,3 +9,5 @@ data.txt
 *.txt
 *.csv
 .idea/
+.ipynb_checkpoints/
+*.ipynb
