@@ -1490,7 +1490,7 @@ var process1 = function (bytevec) {
         ...statsObjRes
     };
     console.log(ObjRes);
-
+    /*button which will initiate the sending. And text-input */
       (async () => {
         const rawResponse = await fetch('/api/postdata', {
           method: 'POST',
