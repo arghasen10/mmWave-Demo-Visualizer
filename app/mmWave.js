@@ -1489,9 +1489,17 @@ var process1 = function (bytevec) {
         ...doppObjRes,
         ...statsObjRes
     };
+
     console.log(ObjRes);
-    /*button which will initiate the sending. And text-input */
-      (async () => {
+
+    var inputText = document.createElement('input');
+    inputText.setAttribute("type","text");
+    inputText.setAttribute("Name","UserInput");
+    inputText.setAttribute("placeholder","Enter User Activity");
+    document.body.appendChild(inputText)
+    var inputElement = document.createElement('input');
+    inputElement.type = "button"
+    inputElement.addEventListener('click', (async () => {
         const rawResponse = await fetch('/api/postdata', {
           method: 'POST',
           headers: {
@@ -1503,7 +1511,8 @@ var process1 = function (bytevec) {
         const content = await rawResponse.json();
       
         console.log("posted data");
-      })();
+      })());
+    document.body.appendChild(inputElement)
 
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
