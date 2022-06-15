@@ -1492,9 +1492,14 @@ var process1 = function (bytevec) {
 
     console.log(ObjRes);
 
-    async function postdata () {
-        var userInput=document.getElementById("ti_widget_textbox_User_activity").value;
-        ObjRes.userActivity=userInput;
+    var inputText = document.createElement('input');
+    inputText.setAttribute("type","text");
+    inputText.setAttribute("Name","UserInput");
+    inputText.setAttribute("placeholder","Enter User Activity");
+    document.body.appendChild(inputText)
+    var inputElement = document.createElement('input');
+    inputElement.type = "button"
+    inputElement.addEventListener('click', (async () => {
         const rawResponse = await fetch('/api/postdata', {
           method: 'POST',
           headers: {
@@ -1506,7 +1511,8 @@ var process1 = function (bytevec) {
         const content = await rawResponse.json();
       
         console.log("posted data");
-    } postdata();
+      })());
+    document.body.appendChild(inputElement)
 
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
