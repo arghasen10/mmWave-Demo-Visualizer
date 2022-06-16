@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import os
 import pandas as pd
 import csv
+import numpy as np
 
 plt.rcParams.update({'font.size': 24})
-plt.rcParams["figure.figsize"] = (10,7)
+plt.rcParams["figure.figsize"] = (10, 7)
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["axes.labelweight"] = "bold"
 plt.grid(alpha=0.2)
@@ -26,7 +27,7 @@ def max_numObj(file, maxNumObj):
         noObj = int(noObj)
         if noObj > maxNumObj:
             maxNumObj = noObj
-            print(maxNumObj)
+            print('maxNumObj', maxNumObj)
     return maxNumObj
 
 
@@ -52,7 +53,7 @@ def process_json_to_df(files):
             output = output.append(d, ignore_index=True)
 
         output = output[col_names]
-        print(len(output['doppz'][0][0]))
+        print('len(output[\'doppz\'][0][0])', len(output['doppz'][0][0]))
         dfs.append(output)
     return dfs
 
@@ -70,7 +71,7 @@ def process_txt_to_csv(files):
                 activity = {'activity': str(file.split('.')[0])}
                 data.update(activity)
                 with open(filepath, 'a') as csvfile:
-                    writer = csv.DictWriter(csvfile, fieldnames = data.keys())
+                    writer = csv.DictWriter(csvfile, fieldnames=data.keys())
                     # writer.writeheader()
                     writer.writerow(data)
         print('done writing file', filepath)
@@ -202,15 +203,66 @@ def plot_y_coord_vs_frame(file):
     plt.show()
 
 
+def zero_padding(df):
+    rangeIdxarr = df['rangeIdx'].to_numpy()
+    print('rangeIdxarr.shape', rangeIdxarr.shape)
+    dopplerIdxarr = df['dopplerIdx'].to_numpy()
+    rangearr = df['range'].to_numpy()
+    peakValarr = df['peakVal'].to_numpy()
+    x_coordarr = df['x_coord'].to_numpy()
+    y_coordarr = df['y_coord'].to_numpy()
+    output = pd.DataFrame()
+    col_name = ['datenow', 'timenow', 'rangeIdx', 'dopplerIdx', 'numDetectedObj', 'range', 'peakVal', 'x_coord',
+                'y_coord', 'rp_y', 'noiserp_y', 'azimuthz', 'doppz', 'activity']
+    print('len(y_coordarr)', len(y_coordarr))
+    print('y_coordarr.shape', y_coordarr.shape)
+    for e in range(0, len(y_coordarr)):
+        t = 20 - len(rangeIdxarr[e])
+        datenow = df['datenow'][e]
+        timenow = df['timenow'][e]
+        rangeIdxarre = np.pad(rangeIdxarr[e], pad_width=(0, t), mode='constant')
+        t = 20 - len(dopplerIdxarr[e])
+        dopplerIdxarre = np.pad(dopplerIdxarr[e], pad_width=(0, t), mode='constant')
+        numDetectedObj = df['numDetectedObj'][e]
+        t = 20 - len(rangearr[e])
+        rangearre = np.pad(rangearr[e], pad_width=(0, t), mode='constant')
+        t = 20 - len(peakValarr[e])
+        peakValarre = np.pad(peakValarr[e], pad_width=(0, t), mode='constant')
+        t = 20 - len(x_coordarr[e])
+        x_coordarre = np.pad(x_coordarr[e], pad_width=(0, t), mode='constant')
+        t = 20 - len(y_coordarr[e])
+        y_coordarre = np.pad(y_coordarr[e], pad_width=(0, t), mode='constant')
+        rp_ye = df['rp_y'][e]
+        noiserp_ye = df['noiserp_y'][e]
+        azimuthze = df['azimuthz'][e]
+        print('azimuthze.shape', azimuthze.shape)
+        doppze = df['doppz'][e]
+        activitye = df['activity'][e]
+
+        dicts = {'datenow': datenow, 'timenow': timenow, 'rangeIdx': rangeIdxarre, 'dopplerIdx': dopplerIdxarre,
+                 'numDetectedObj': numDetectedObj, 'range': rangearre, 'peakVal': peakValarre, 'x_coord': x_coordarre,
+                 'y_coord': y_coordarre, 'rp_y': rp_ye, 'noiserp_y': noiserp_ye, 'azimuthz': azimuthze, 'doppz': doppze,
+                 'activity': activitye}
+        output = output.append(dicts, ignore_index=True)
+    output = output[col_name]
+    return output
+
+
 files = find_files_in_path('data_collection/day2Argha/')
 dfs = process_json_to_df(files)
-print(len(dfs))
+print('len(dfs)', len(dfs))
 
+outputdfs = []
 for df in dfs:
-    plot_rangeIdx_vs_frame(df)
-    plot_peakVal_vs_frame(df)
-    plot_x_coord_vs_frame(df)
-    plot_dopplerIdx_vs_frame(df)
-    plot_range_vs_frame(df)
-    plot_y_coord_vs_frame(df)
+    output = zero_padding(df)
+    outputdfs.append(output)
+    print('Done with ', output['activity'][0])
+    break
 
+final_df = pd.concat(outputdfs, axis=0, ignore_index=False, keys=None, levels=None, names=None)
+print('final_df.shape', final_df.shape)
+print(final_df.head())
+print('len(final_df[\'doppz\'][0])', len(final_df['doppz'][0]))
+print('len(final_df[\'doppz\'][0][0])', len(final_df['doppz'][0][0]))
+print('len(final_df[\'noiserp_y\'][0])', len(final_df['noiserp_y'][0]))
+print('len(final_df[\'range\'][0])', len(final_df['range'][0]))
