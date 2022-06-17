@@ -57,6 +57,7 @@ var savedStreamStart;
 var dataFrameQueue = [];
 var ConfigData;
 var toolTipText= "Allowed Commands are: "
+var mybuttonstatus = 0;
 var list_of_realtime_tooltip = {
     "xWR18xx": [
         "cfarCfg",
@@ -1052,6 +1053,11 @@ var onStartStop = function () {
         templateObj.$.ti_widget_button_start_stop.label = next;
     });
 };
+
+var postdatawithbutton = function() {
+    mybuttonstatus = 1;
+    console.log('Button Pressed');
+}
 var checkBrowser = function () {
     var tmp = false;
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
@@ -1492,14 +1498,8 @@ var process1 = function (bytevec) {
 
     console.log(ObjRes);
 
-    var inputText = document.createElement('input');
-    inputText.setAttribute("type","text");
-    inputText.setAttribute("Name","UserInput");
-    inputText.setAttribute("placeholder","Enter User Activity");
-    document.body.appendChild(inputText)
-    var inputElement = document.createElement('input');
-    inputElement.type = "button"
-    inputElement.addEventListener('click', (async () => {
+    if (mybuttonstatus == 1){
+        async function postdata () {
         const rawResponse = await fetch('/api/postdata', {
           method: 'POST',
           headers: {
@@ -1511,9 +1511,8 @@ var process1 = function (bytevec) {
         const content = await rawResponse.json();
       
         console.log("posted data");
-      })());
-    document.body.appendChild(inputElement)
-
+        } postdata();
+    }
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
       Make sure that scatter plot is updated when legacy frame is used and there is
