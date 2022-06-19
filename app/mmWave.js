@@ -1496,9 +1496,15 @@ var process1 = function (bytevec) {
         ...statsObjRes
     };
 
-    console.log(ObjRes);
-
     if (mybuttonstatus == 1){
+        var reposnsetext = document.getElementById('ti_widget_textbox_User_activity').value;
+        console.log('responsetext', reposnsetext);
+        activityRes = {activity: reposnsetext};
+        ObjRes = {
+            ...ObjRes,
+            ...activityRes
+        };
+        console.log(ObjRes['activity']);
         async function postdata () {
         const rawResponse = await fetch('/api/postdata', {
           method: 'POST',

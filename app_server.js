@@ -106,8 +106,16 @@ AppServer.prototype.start = function() {
 					
 					req.on('end', function () {
 						body += '\n';
-						// console.log(body);
-						fs.appendFile('data.txt', body, function (err) {
+						activity_str = body.substring(body.indexOf('activity')+11);
+						activity_str = activity_str.substring(0, activity_str.indexOf('"}'));
+						activity_str = activity_str + '.txt';
+						if (fs.existsSync(activity_str)){
+							console.log('File already exists');
+						}
+						else{
+							fs.closeSync(fs.openSync(activity_str, 'w'));
+						}
+						fs.appendFile(activity_str, body, function (err) {
 							if (err) throw err;
 							console.log('Saved! ' + body.length);
 						  });
