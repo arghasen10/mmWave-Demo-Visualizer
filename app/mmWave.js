@@ -1058,6 +1058,10 @@ var postdatawithbutton = function() {
     mybuttonstatus = 1;
     console.log('Button Pressed');
 }
+var stoprecording = function() {
+    mybuttonstatus=0;
+    console.log('Recording stopped');
+}
 var checkBrowser = function () {
     var tmp = false;
     if (navigator.userAgent.indexOf('Firefox') >= 0) {

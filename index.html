@@ -520,6 +520,17 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     position: absolute;
     width: 50px;
   }
+  #ti_widget_textbox_User_activity{
+    top: 5px;
+    position: absolute;
+    width: 200px;
+  }
+  #ti_widget_textbox_User_timeframe{
+    left: 200px;
+    top: 5px;
+    position:absolute;
+    width: 100px;
+  }
   #ti_widget_label_rpymax {
     text-align: left;
     text-decoration: none;
@@ -980,6 +991,15 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     left: 80px;
     top: 80px;
     position: absolute;
+  }
+  #ti_widget_button_post_data{
+    top: 35px;
+    position: relative;
+  }
+  #ti_widget_button_stop_rec{
+    top: 35px;
+    left: 100px;
+    position: relative;
   }
   #ti_widget_label_record_file_size_limit {
     text-align: left;
@@ -1462,7 +1482,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <ti-widget-button label="Load Config from PC and Send" button-type="default" raised visible bindable-trigger="25" id="ti_widget_button_load_cfg" class="_TI_ x-scope ti-widget-button-0" onclick="onLoadCfg()" elevation="1" animated title></ti-widget-button>
                 <form id="input_user_activity">
                   <ti-widget-textbox text-align="left" font-size="inherit" font-style="normal" font-weight="normal" text-decoration="none" visible tooltip="The data recorded would be based on this user activity " id="ti_widget_textbox_User_activity" class="_TI_ x-scope ti-widget-textbox-0" placeholder="Enter User Activity"></ti-widget-textbox>
+                  <ti-widget-textbox text-align="left" font-size="inherit" font-style="normal" font-weight="normal" text-decoration="none" visible tooltip="Timeframe for data " id="ti_widget_textbox_User_timeframe" class="_TI_ x-scope ti-widget-textbox-0" placeholder="Enter time"></ti-widget-textbox>
                   <ti-widget-button label="Post Data" button-type="default" raised visible bindable-trigger="47" id="ti_widget_button_post_data" animated elevation="1" onclick="postdatawithbutton()" class="_TI_ x-scope ti-widget-button-0" title></ti-widget-button>
+                  <ti-widget-button label="Stop Rec" button-type="default" raised visible bindable-trigger="47" id="ti_widget_button_stop_rec" animated elevation="1" onclick="stoprecording()" class="_TI_ x-scope ti-widget-button-0" title></ti-widget-button>
                     
                 </form>
             </ti-widget-container>
