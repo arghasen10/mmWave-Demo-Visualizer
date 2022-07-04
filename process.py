@@ -248,21 +248,63 @@ def zero_padding(df):
     return output
 
 
-files = find_files_in_path('data_collection/day2Argha/')
+files = find_files_in_path('data_collection/day3ArghaAnirbanFine/')
 dfs = process_json_to_df(files)
 print('len(dfs)', len(dfs))
 
-outputdfs = []
-for df in dfs:
-    output = zero_padding(df)
-    outputdfs.append(output)
-    print('Done with ', output['activity'][0])
-    break
+# outputdfs = []
+# for df in dfs:
+#     output = zero_padding(df)
+#     outputdfs.append(output)
+#     print('Done with ', output['activity'][0])
+#     break
+#
+# final_df = pd.concat(outputdfs, axis=0, ignore_index=False, keys=None, levels=None, names=None)
+# print('final_df.shape', final_df.shape)
+# print(final_df.head())
+# print('len(final_df[\'doppz\'][0])', len(final_df['doppz'][0]))
+# print('len(final_df[\'doppz\'][0][0])', len(final_df['doppz'][0][0]))
+# print('len(final_df[\'noiserp_y\'][0])', len(final_df['noiserp_y'][0]))
+# print('len(final_df[\'range\'][0])', len(final_df['range'][0]))
 
-final_df = pd.concat(outputdfs, axis=0, ignore_index=False, keys=None, levels=None, names=None)
-print('final_df.shape', final_df.shape)
-print(final_df.head())
-print('len(final_df[\'doppz\'][0])', len(final_df['doppz'][0]))
-print('len(final_df[\'doppz\'][0][0])', len(final_df['doppz'][0][0]))
-print('len(final_df[\'noiserp_y\'][0])', len(final_df['noiserp_y'][0]))
-print('len(final_df[\'range\'][0])', len(final_df['range'][0]))
+
+def plot_doppler_frame(df):
+    framenoarr = []
+    dopplerarrvalue = []
+    framenoarr1 = []
+    dopplerarrvalue1 = []
+    rangeIdxarr = df['rangeIdx'].to_numpy()
+    doppvalarr = df['doppz']
+    counter = 0
+    for e in range(0, len(rangeIdxarr)):
+        counter += 1
+        for elem in rangeIdxarr[e]:
+            if 18 < elem < 25:
+                #argha
+                doppvalarrframe = np.array(doppvalarr[e])
+                print(doppvalarrframe.shape)
+                doppvalarrframe = doppvalarrframe.transpose()
+                for dope in doppvalarrframe[elem]:
+                    if dope > 28000:
+                        dopplerarrvalue.append(dope)
+                        framenoarr.append(counter)
+            if 70 < elem < 140:
+                #anirban
+                doppvalarrframe = np.array(doppvalarr[e])
+                print(doppvalarrframe.shape)
+                doppvalarrframe = doppvalarrframe.transpose()
+                for dope in doppvalarrframe[elem]:
+                    if dope > 28000:
+                        dopplerarrvalue1.append(dope)
+                        framenoarr1.append(counter)
+    plt.scatter(framenoarr, dopplerarrvalue, color='r', label='argha')
+    plt.scatter(framenoarr1, dopplerarrvalue1, color='b', label='anirban')
+    plt.title('Activity = {activity}'.format(activity=df['activity'][0]))
+    plt.legend()
+    plt.show()
+
+rangearrval = []
+countarr = []
+for df in dfs:
+    plot_doppler_frame(df)
+    # print(df['activity'])
