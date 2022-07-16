@@ -1053,13 +1053,17 @@ var onStartStop = function () {
         templateObj.$.ti_widget_button_start_stop.label = next;
     });
 };
-
+var seconds=0;
 var postdatawithbutton = function() {
     mybuttonstatus = 1;
+    setInterval(function() {
+        timer.innerHTML = seconds++;
+        }, 1000);
     console.log('Button Pressed');
 }
 var stoprecording = function() {
     mybuttonstatus=0;
+    seconds=0;
     console.log('Recording stopped');
 }
 var checkBrowser = function () {
@@ -1501,27 +1505,31 @@ var process1 = function (bytevec) {
     };
 
     if (mybuttonstatus == 1){
-        var reposnsetext = document.getElementById('ti_widget_textbox_User_activity').value;
-        console.log('responsetext', reposnsetext);
-        activityRes = {activity: reposnsetext};
-        ObjRes = {
-            ...ObjRes,
-            ...activityRes
-        };
-        console.log(ObjRes['activity']);
-        async function postdata () {
-        const rawResponse = await fetch('/api/postdata', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(ObjRes)
-        });
-        const content = await rawResponse.json();
-      
-        console.log("posted data");
-        } postdata();
+        var timeframe = document.getElementById('ti_widget_textbox_User_timeframe').value;
+        if(seconds<=timeframe)
+        {
+            var reposnsetext = document.getElementById('ti_widget_textbox_User_activity').value;
+            console.log('responsetext', reposnsetext);
+            activityRes = {activity: reposnsetext};
+            ObjRes = {
+                ...ObjRes,
+                ...activityRes
+            };
+            console.log(ObjRes['activity']);
+            async function postdata () {
+            const rawResponse = await fetch('/api/postdata', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ObjRes)
+            });
+            const content = await rawResponse.json();
+        
+            console.log("posted data");
+            } postdata();
+        }
     }
     /*Make sure that scatter plot is updated when advanced frame config
       is used even when there is no data for this subframe.
