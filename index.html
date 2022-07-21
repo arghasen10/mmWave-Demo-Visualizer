@@ -100,6 +100,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <template id="template_obj" is="dom-bind">
 
 <style is="custom-style">
+  #ti_widget_menubar {
+    top: 0px;
+    width: 100%;
+    margin: 0px;
+    z-index: 1100;
+    position: absolute;
+  }
   
   html .viewport {
     position: absolute;
@@ -1340,6 +1347,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     height: 40px;
     position: absolute;
   }
+  #ti_widget_menubar {
+    background-color: rgb(204, 0, 0);
+  }
   
   html .ti-theme paper-tabs {
     color: rgb(35, 31, 32);
@@ -1364,7 +1374,15 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <ti-widget-readme background-color="#ffffff" elevation="5" title-text='How to use "mmWave Demo Visualizer"' id="readmeViewer" class="_TI_" readme-file-exists></ti-widget-readme>
 <ti-core-stylesheets class="_TI_" id="ti_core_stylesheets"></ti-core-stylesheets>
-
+<ti-widget-menubar product-name="mmWave Demo Visualizer" id="ti_widget_menubar" pin horizontal class="_TI_ x-scope ti-widget-menubar-0" layout>
+    <ti-widget-filemenu id="ti_widget_filemenu" class="_TI_" layout></ti-widget-filemenu>
+    <ti-widget-optionsmenu id="ti_widget_optionsmenu" class="_TI_" layout></ti-widget-optionsmenu>
+    <ti-widget-helpmenu id="ti_widget_helpmenu" class="_TI_" layout>
+        <ti-widget-menuaction name="Visualizer User Guide" icon-name="av:library-books" id="ti_widget_menuaction_userguide" class="_TI_ subMenuItem"></ti-widget-menuaction>
+        <ti-widget-menuaction name="Download or Clone Visualizer" icon-name="icons:get-app" id="ti_widget_menuaction_download" class="_TI_ subMenuItem"></ti-widget-menuaction>
+    </ti-widget-helpmenu>
+    <ti-widget-toast message="some messages here" duration="3000" id="ti_widget_toast_common" class="_TI_ toolMenuItem x-scope ti-widget-toast-0" hidden></ti-widget-toast>
+</ti-widget-menubar>
 
 
 <ti-widget-container font-size="inherit" auto-scroll font-style="normal" font-weight="normal" text-align="left" text-decoration="none" visible id="viewport" title class="_TI_ viewport" pin>
@@ -1589,6 +1607,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <ti-transport-usb id="my_transport1" usb default-baud-rate="921600" description="DATA_port" class="_TI_">
     <ti-model-streaming id="DATA_port" protocol="raw" class="_TI_"></ti-model-streaming>
 </ti-transport-usb>
+<input type="file" class="_TI_" id="myFileLoadDialog">
 <ti-widget-streamsaver id="ti_widget_streamsaver" class="_TI_"></ti-widget-streamsaver>
 
 <paper-dialog class="_TI_ x-scope paper-dialog-0" id="dialog_help_about" modal>
