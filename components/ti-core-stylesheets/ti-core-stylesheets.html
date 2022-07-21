@@ -3307,7 +3307,17 @@ See demo.html to select the theme to use and to see a working example of the wid
     (function() {
 		var rightMargin  			= 5;
 		var bottomMargin 			= 0;
-		
+		var poweredBy 				= document.createElement("div");
+		poweredBy.innerHTML 		= "Powered By GUI Composer&trade;";
+		poweredBy.style.position 	= "absolute";
+		poweredBy.style.color 		= "#000";
+		poweredBy.style.fontStyle	= "italic";
+		poweredBy.style.fontSize	= "x-small";
+		poweredBy.style.zIndex		= 9999;
+		poweredBy.style.position	= "fixed";
+		poweredBy.style.right		= rightMargin + "px";
+		poweredBy.style.bottom		= bottomMargin + "px";
+        poweredBy.setAttribute("class", "poweredby-gc");
 
         var onDocumentLoaded = function() 
         {
